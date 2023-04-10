@@ -4,11 +4,18 @@ services:
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
     container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      # - SYS_MODULE
     volumes:
-      - ./wg0.conf:/config/wg0.conf:ro
-    # ports:
-    #   - 8000:8000
-    #   - 3000:3000
+      - ./config/wg0.conf:/config/wg0.conf:ro
+    ports:
+      - 8000:8000
+      - 3000:3000
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
 
   hbp:
     image: hbp
