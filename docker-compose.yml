@@ -1,0 +1,34 @@
+---
+version: "2.1"
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    volumes:
+      - ./wg0.conf:/config/wg0.conf:ro
+    # ports:
+    #   - 8000:8000
+    #   - 3000:3000
+
+  hbp:
+    image: hbp
+    build: 
+      context: ./hbp
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./hbp/.env
+    volumes:
+      - ./hbp/markdown:/markdown
+      - ./hbp/static:/ui:ro
+    restart: unless-stopped
+    network_mode: service:wireguard
+
+  pricer:
+    image: pricer
+    build:
+      context: ./pricer
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./pricer/.env
+    restart: unless-stopped
+    network_mode: service:wireguard
