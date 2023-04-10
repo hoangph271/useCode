@@ -1,21 +1,19 @@
 ---
 version: "2.1"
 services:
-  wireguard:
-    image: lscr.io/linuxserver/wireguard:latest
-    container_name: wireguard
-    cap_add:
-      - NET_ADMIN
-      # - SYS_MODULE
-    volumes:
-      - ./config/wg0.conf:/config/wg0.conf:ro
-    ports:
-      - 8000:8000
-      - 3000:3000
-      - 51820:51820/udp
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    restart: unless-stopped
+  # wireguard:
+  #   image: lscr.io/linuxserver/wireguard:latest
+  #   container_name: wireguard
+  #   cap_add:
+  #     - NET_ADMIN
+  #     # - SYS_MODULE
+  #   volumes:
+  #     - ./config/wg0.conf:/config/wg0.conf:ro
+  #   ports:
+  #     - 51820:51820/udp
+  #   sysctls:
+  #     - net.ipv4.conf.all.src_valid_mark=1
+  #   restart: unless-stopped
 
   hbp:
     image: hbp
@@ -28,7 +26,9 @@ services:
       - ./hbp/markdown:/markdown
       - ./hbp/static:/ui:ro
     restart: unless-stopped
-    network_mode: service:wireguard
+    # network_mode: service:wireguard
+    ports:
+      - 8000:8000
 
   pricer:
     image: pricer
@@ -38,4 +38,31 @@ services:
     env_file:
       - ./pricer/.env
     restart: unless-stopped
-    network_mode: service:wireguard
+    # network_mode: service:wireguard
+    ports:
+      - 3000:3000
+
+  nextcloud_db:
+    image: mariadb:10.6
+    container_name: nextcloud_db
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - ./nextcloud_db:/var/lib/mysql
+    env_file:
+      - .nextcloud_db.env
+    # network_mode: service:wireguard
+    restart: unless-stopped
+
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    volumes:
+      - ./nextcloud:/var/www/html/
+    links:
+      - nextcloud_db
+    env_file:
+      - .nextcloud_db.env
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    # network_mode: service:wireguard
