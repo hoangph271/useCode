@@ -26,7 +26,6 @@ services:
       - ./hbp/markdown:/markdown
       - ./hbp/static:/ui:ro
     restart: unless-stopped
-    # network_mode: service:wireguard
     ports:
       - 8000:8000
 
@@ -38,31 +37,45 @@ services:
     env_file:
       - ./pricer/.env
     restart: unless-stopped
-    # network_mode: service:wireguard
     ports:
       - 3000:3000
 
-  nextcloud_db:
-    image: mariadb:10.6
-    container_name: nextcloud_db
-    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    # environment:
+      # - PUID=1000
+      # - PGID=1000
+      # - TZ=Etc/UTC
+      # - VERSION=docker
+      # - PLEX_CLAIM= #optional
     volumes:
-      - ./nextcloud_db:/var/lib/mysql
-    env_file:
-      - .nextcloud_db.env
-    # network_mode: service:wireguard
-    restart: unless-stopped
-
-  nextcloud:
-    image: nextcloud
-    container_name: nextcloud
-    volumes:
-      - ./nextcloud:/var/www/html/
-    links:
-      - nextcloud_db
-    env_file:
-      - .nextcloud_db.env
+      - ./plex:/config
+      - D:\useSeries:/useSeries
+      - D:\useMovie:/movies
     restart: unless-stopped
     ports:
-      - 8080:80
-    # network_mode: service:wireguard
+      - 32400:32400
+
+  # nextcloud_db:
+  #   image: mariadb:10.6
+  #   container_name: nextcloud_db
+  #   command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+  #   volumes:
+  #     - ./nextcloud_db:/var/lib/mysql
+  #   env_file:
+  #     - .nextcloud_db.env
+  #   restart: unless-stopped
+
+  # nextcloud:
+  #   image: nextcloud
+  #   container_name: nextcloud
+  #   volumes:
+  #     - ./nextcloud:/var/www/html/
+  #   links:
+  #     - nextcloud_db
+  #   env_file:
+  #     - .nextcloud_db.env
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8080:80
