@@ -57,6 +57,15 @@ services:
     ports:
       - 32400:32400
 
+  leptos-tutorial:
+    image: leptos-tutorial
+    build: 
+      context: ./leptos-tutorial
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+
   # nextcloud_db:
   #   image: mariadb:10.6
   #   container_name: nextcloud_db
