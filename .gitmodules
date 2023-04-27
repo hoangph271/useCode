@@ -1,0 +1,12 @@
+[submodule "hbp"]
+	path = hbp
+	url = https://github.com/hoangph271/hbp
+[submodule "pricer"]
+	path = pricer
+	url = https://github.com/hoangph271/pricer
+[submodule "wg"]
+	path = wg
+	url = https://github.com/hoangph271/wg
+[submodule "nginx"]
+	path = nginx
+	url = https://github.com/hoangph271/nginx
