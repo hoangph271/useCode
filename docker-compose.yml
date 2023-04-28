@@ -11,15 +11,23 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
+      # - SERVERURL=wireguard.domain.com #optional
+      - SERVERPORT=51820 #optional
+      - PEERS=10 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=10.13.13.0 #optional
+      - ALLOWEDIPS=0.0.0.0/0 #optional
+      - PERSISTENTKEEPALIVE_PEERS= #optional
+      - LOG_CONFS=true #optional
     volumes:
-      - .wg/config:/config
+      - ./wg/config:/config
+      - ./modules:/lib/modules #optional
     ports:
       - 51820:51820/udp
       - 80:80
       - 443:443
-      - 8000:8000
-      - 3000:3000
-      - 32400:32400
+    # sysctls:
+    #   - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
 
   nginx:
@@ -31,24 +39,24 @@ services:
       - ./nginx/sites-available:/etc/nginx/sites-available:ro
       - ./nginx/sites-available:/etc/nginx/sites-enabled:ro
 
-  hbp:
-    image: hbp
-    build:
-      context: ./hbp
-      dockerfile: ./Dockerfile
-    env_file:
-      - ./hbp/.env
-    volumes:
-      - ./hbp/markdown:/markdown
-      - ./hbp/static:/ui:ro
-    restart: unless-stopped
-    network_mode: service:wireguard
+  # hbp:
+  #   image: hbp
+  #   build:
+  #     context: ./hbp
+  #     dockerfile: ./Dockerfile
+  #   env_file:
+  #     - ./hbp/.env
+  #   volumes:
+  #     - ./hbp/markdown:/markdown
+  #     - ./hbp/static:/ui:ro
+  #   restart: unless-stopped
+  #   network_mode: service:wireguard
 
-  pricer:
-    image: pricer
-    build:
-      context: ./pricer
-      dockerfile: ./Dockerfile
-    env_file:
-      - ./pricer/.env
-    restart: unless-stopped
+  # pricer:
+  #   image: pricer
+  #   build:
+  #     context: ./pricer
+  #     dockerfile: ./Dockerfile
+  #   env_file:
+  #     - ./pricer/.env
+  #   restart: unless-stopped
