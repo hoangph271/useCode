@@ -1,0 +1,33 @@
+---
+version: "2.1"
+services:
+  rathole:
+    image: rathole
+    volumes:
+      - ./rathole/server.toml:/app/config.toml
+    command: --server /app/config.toml
+
+  # hbp:
+  #   image: hbp
+  #   build:
+  #     context: ./hbp
+  #     dockerfile: ./Dockerfile
+  #   env_file:
+  #     - ./hbp/.env
+  #   volumes:
+  #     - ./hbp/markdown:/markdown
+  #     - ./hbp/static:/ui:ro
+  #   ports:
+  #     - 8000:8000
+  #   restart: unless-stopped
+
+  # pricer:
+  #   image: pricer
+  #   build:
+  #     context: ./pricer
+  #     dockerfile: ./Dockerfile
+  #   env_file:
+  #     - ./pricer/.env
+  #   ports:
+  #     - 3000:3000
+  #   restart: unless-stopped
