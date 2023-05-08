@@ -12,4 +12,4 @@
 	url = https://github.com/hoangph271/nginx
 [submodule "milestones"]
 	path = milestones
-	url = https://github.com/hoangph271/milestones
+	url = https://github.com/hoangph271/milestones.git
