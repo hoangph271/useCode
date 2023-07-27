@@ -13,3 +13,6 @@
 [submodule "milestones"]
 	path = milestones
 	url = https://github.com/hoangph271/milestones.git
+[submodule "rathole"]
+	path = rathole
+	url = https://github.com/hoangph271/rathole.git
