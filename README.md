@@ -10,3 +10,7 @@ git submodule update --init
 git config --global user.name 'Phan Huy Hoang'
 git config --global user.email 'hoangph271@gmail.com'
 ```
+
+Used ports:
+
+- Kasmworkspace at 10010
